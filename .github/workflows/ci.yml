@@ -102,31 +102,4 @@ jobs:
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/ai-learning-platform-backend:latest
 
-  deploy:
-    needs: [build-and-push]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Deploy Frontend to Vercel
-      uses: amondnet/vercel-action@v20
-      with:
-        vercel-token: ${{ secrets.VERCEL_TOKEN }}
-        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-        working-directory: ./frontend
-        vercel-args: '--prod'
-
-    - name: Deploy to Digital Ocean
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.DIGITALOCEAN_HOST }}
-        username: ${{ secrets.DIGITALOCEAN_USERNAME }}
-        key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
-        script: |
-          cd /opt/ai-learning-platform
-          git pull
-          docker-compose -f docker-compose.prod.yml pull
-          docker-compose -f docker-compose.prod.yml up -d
+  # Deployment section removed as requested
